@@ -1,0 +1,27 @@
+name: Weekly Web Scraper
+
+on:
+  schedule:
+    - cron: '0 21 * * MON' # 4pm every Monday
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # Or your preferred Python version
+      - name: Install dependencies
+        run: pip install -r requirements.txt # Create a requirements.txt file with your dependencies
+      - name: Run scraper
+        run: python scraper.py
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add chart_data.csv
+          git commit -m "Update chart data" -a || echo "No changes to commit"
+          git push
