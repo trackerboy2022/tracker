@@ -17,6 +17,8 @@ jobs:
           python-version: '3.9' # Or your preferred Python version
       - name: Install dependencies
         run: pip install -r requirements.txt # Create a requirements.txt file with your dependencies
+      - name: Debug Environment Variables
+        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}' | jq .
       - name: Run scraper
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.G_SHEET_CREDS }}
