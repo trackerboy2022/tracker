@@ -102,8 +102,7 @@ def output_to_google_sheets(data, spreadsheet_id, sheet_name):
         print("GOOGLE_SERVICE_ACCOUNT_KEY not found.")
         exit()
 
-    creds_dict = json.loads(google_service_account_key_json)
-    creds = Credentials.from_service_account_info(creds_dict)
+    creds = Credentials.from_service_account_info(google_service_account_key, scopes=scopes)
 
     # Authenticate with Google Sheets API
     client = gspread.authorize(creds)
