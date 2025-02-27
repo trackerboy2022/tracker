@@ -89,7 +89,9 @@ def output_to_google_sheets(data, spreadsheet_id, sheet_name):
     """
     # Define the scope of the API
     scopes = [
-        'https://www.googleapis.com/auth/spreadsheets',
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive"
     ]
 
     # Access the Google service account key
