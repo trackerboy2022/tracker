@@ -18,11 +18,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt # Create a requirements.txt file with your dependencies
       - name: Run scraper
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.G_SHEET_CREDS }}
+          GOOGLE_SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
         run: python scraper.py
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add chart_data.csv
-          git commit -m "Update chart data" -a || echo "No changes to commit"
-          git push
