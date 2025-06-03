@@ -87,6 +87,18 @@ print(f"Post URL: {target_post['link']}")
 # print("\nFirst few rows of rankings with dates:")
 # print(df.head(10))
 
+import os
+
+league_id = os.getenv("LEAGUE_ID")
+season_id = os.getenv("SEASON_ID")
+espn_s2 = os.getenv("ESPN_S2")
+swid = os.getenv("SWID")
+
+print("league_id present:", league_id is not None, "; length:", len(league_id) if league_id else 0)
+print("season_id present:", season_id is not None, "; length:", len(season_id) if season_id else 0)
+print("espn_s2 present:", espn_s2 is not None, "; length:", len(espn_s2) if espn_s2 else 0)
+print("swid present:", swid is not None, "; length:", len(swid) if swid else 0)
+
 # Install the espn-api library first: pip install espn-api
 from espn_api.baseball import League
 
