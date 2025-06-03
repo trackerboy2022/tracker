@@ -91,10 +91,10 @@ print(f"Post URL: {target_post['link']}")
 from espn_api.baseball import League
 
 # Step 6: Connect to your ESPN Fantasy Baseball League
-league_id = "LEAGUE_ID"  # Replace with your ESPN league ID
+league_id = "SECRET_LEAGUE_ID"  # Replace with your ESPN league ID
 season_id = 2025  # Replace with the current season year
-espn_s2 = "ESPN_S2_COOKIE"
-swid = "SWID"  # Replace with your SWID cookie
+espn_s2 = "SECRET_ESPN_S2_COOKIE"
+swid = "SECRET_SWID"  # Replace with your SWID cookie
 
 # Authenticate and connect to the league
 league = League(league_id=league_id, year=season_id, espn_s2=espn_s2, swid=swid)
@@ -143,7 +143,7 @@ def import_google_sheet(sheet_url, sheet_name):
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
     # Access the Google service account key
-    google_service_account_key_json = os.environ.get("FBB_G_SHEET_CREDS")
+    google_service_account_key_json = os.environ.get("SECRET_FBB_G_SHEET_CREDS")
     if google_service_account_key_json:
         google_service_account_key = json.loads(google_service_account_key_json)
     else:
@@ -232,7 +232,7 @@ def export_to_google_sheet(df, sheet_url, sheet_name='Sheet2'):
              'https://www.googleapis.com/auth/spreadsheets']  # Added spreadsheets scope
 
     # Access the Google service account key
-    google_service_account_key_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_KEY")
+    google_service_account_key_json = os.environ.get("SECRET_GOOGLE_SERVICE_ACCOUNT_KEY")
     if google_service_account_key_json:
         google_service_account_key = json.loads(google_service_account_key_json)
     else:
@@ -291,4 +291,4 @@ def export_to_google_sheet(df, sheet_url, sheet_name='Sheet2'):
 import os
 
 # Export the DataFrame to Sheet2 (using sheet ID from your URL)
-export_to_google_sheet(df, "SPREADSHEET_ID")
+export_to_google_sheet(df, "SECRET_SPREADSHEET_ID")
