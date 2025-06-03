@@ -94,7 +94,6 @@ espn_s2 = os.getenv("SECRET_ESPN_S2_COOKIE")
 swid = os.getenv("SECRET_SWID")
 
 print("league_id present:", league_id is not None, "; length:", len(league_id) if league_id else 0)
-print("season_id present:", season_id is not None, "; length:", len(season_id) if season_id else 0)
 print("espn_s2 present:", espn_s2 is not None, "; length:", len(espn_s2) if espn_s2 else 0)
 print("swid present:", swid is not None, "; length:", len(swid) if swid else 0)
 
