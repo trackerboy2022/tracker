@@ -1,0 +1,28 @@
+name: Fantasy Baseball
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # 10am Daily
+  workflow_dispatch: # Add this trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # Or your preferred Python version
+      - name: Install dependencies
+        run: pip install -r requirements.txt # Create a requirements.txt file with your dependencies
+      - name: Run pitchers
+        env:
+          SECRET_GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.G_SHEET_CREDS }}
+          SECRET_GOOGLE_SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SECRET_ESPN_S2_COOKIE: ${{ secrets.ESPN_S2_COOKIE }}
+          SECRET_SWID: ${{ secrets.SWID }}
+          SECRET_LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+          SECRET_FBB_G_SHEET_CREDS: ${{ secrets.FBB_G_SHEET_CREDS }}
+        run: python pitchers.py
