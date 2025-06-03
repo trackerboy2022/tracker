@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Add this trigger
 
 jobs:
-  scrape:
+  get_pitchers:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -25,4 +25,4 @@ jobs:
           SECRET_SWID: ${{ secrets.SWID }}
           SECRET_LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
           SECRET_FBB_G_SHEET_CREDS: ${{ secrets.FBB_G_SHEET_CREDS }}
-        run: python pitchers.py
+        run: python fbb/pitchers.py
