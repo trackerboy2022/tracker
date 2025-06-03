@@ -89,10 +89,9 @@ print(f"Post URL: {target_post['link']}")
 
 import os
 
-league_id = os.getenv("LEAGUE_ID")
-season_id = os.getenv("SEASON_ID")
-espn_s2 = os.getenv("ESPN_S2")
-swid = os.getenv("SWID")
+league_id = os.getenv("SECRET_LEAGUE_ID")
+espn_s2 = os.getenv("SECRET_ESPN_S2_COOKIE")
+swid = os.getenv("SECRET_SWID")
 
 print("league_id present:", league_id is not None, "; length:", len(league_id) if league_id else 0)
 print("season_id present:", season_id is not None, "; length:", len(season_id) if season_id else 0)
