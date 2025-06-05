@@ -89,22 +89,18 @@ print(f"Post URL: {target_post['link']}")
 
 import os
 
+# Install the espn-api library first: pip install espn-api
+from espn_api.baseball import League
+
+# Step 6: Connect to your ESPN Fantasy Baseball League
 league_id = os.getenv("SECRET_LEAGUE_ID")
+season_id = 2025
 espn_s2 = os.getenv("SECRET_ESPN_S2_COOKIE")
 swid = os.getenv("SECRET_SWID")
 
 print("league_id present:", league_id is not None, "; length:", len(league_id) if league_id else 0)
 print("espn_s2 present:", espn_s2 is not None, "; length:", len(espn_s2) if espn_s2 else 0)
 print("swid present:", swid is not None, "; length:", len(swid) if swid else 0)
-
-# Install the espn-api library first: pip install espn-api
-from espn_api.baseball import League
-
-# Step 6: Connect to your ESPN Fantasy Baseball League
-league_id = "SECRET_LEAGUE_ID"  # Replace with your ESPN league ID
-season_id = 2025  # Replace with the current season year
-espn_s2 = "SECRET_ESPN_S2_COOKIE"
-swid = "SECRET_SWID"  # Replace with your SWID cookie
 
 # Authenticate and connect to the league
 league = League(league_id=league_id, year=season_id, espn_s2=espn_s2, swid=swid)
