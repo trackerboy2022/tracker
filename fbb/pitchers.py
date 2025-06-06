@@ -143,6 +143,7 @@ for pitcher in available_pitchers:
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 
 # Step 10: Import data from Google Sheets
 def import_google_sheet(sheet_url, sheet_name):
