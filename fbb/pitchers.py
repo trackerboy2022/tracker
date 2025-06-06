@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from rapidfuzz import process, fuzz  # Import fuzz separately
+import json
 
 # Step 1: Access the WordPress API
 url = 'https://pitcherlist.com/wp-json/wp/v2/posts?per_page=20'
