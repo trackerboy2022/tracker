@@ -149,6 +149,9 @@ from google.oauth2.service_account import Credentials
 def import_google_sheet(sheet_url, sheet_name):
     # Define the scope for Google Sheets and Google Drive
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    
+    scopes = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    creds = Credentials.from_service_account_info(google_service_account_key, scopes=scopes)
 
     # Access the Google service account key
     google_service_account_key_json = os.environ.get("SECRET_FBB_G_SHEET_CREDS")
@@ -235,7 +238,7 @@ df = df[df['Tier'] != 'Do Not Start']
 # Function to export DataFrame to Google Sheet
 def export_to_google_sheet(df, sheet_url, sheet_name='Sheet2'):
     # Define the scope for Google Sheets and Drive
-    scope = ['https://spreadsheets.google.com/feeds', 
+    scopes = ['https://spreadsheets.google.com/feeds', 
              'https://www.googleapis.com/auth/drive',
              'https://www.googleapis.com/auth/spreadsheets']  # Added spreadsheets scope
 
