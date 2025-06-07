@@ -216,12 +216,14 @@ def process_google_sheet_data(df, google_sheet_data):
 
             # Add the Google Sheets data to the rankings DataFrame
             df.loc[index, 'Eno Name'] = matched_row['Eno Name']
-            df.loc[index, 'Eno'] = matched_row['Eno']
-            df.loc[index, 'Stuff+'] = matched_row['Stuff+']
-            df.loc[index, 'Location+'] = matched_row['Location+']
-            df.loc[index, 'Pitching+'] = matched_row['Pitching+']
+            df.loc[index, 'Eno'] = pd.to_numeric(matched_row['Eno'], errors='coerce')
+            df.loc[index, 'Stuff+'] = pd.to_numeric(matched_row['Stuff+'], errors='coerce')
+            df.loc[index, 'Location+'] = pd.to_numeric(matched_row['Location+'], errors='coerce')
+            df.loc[index, 'Pitching+'] = pd.to_numeric(matched_row['Pitching+'], errors='coerce')
             df.loc[index, 'Notes'] = matched_row['Notes']
 
+
+    
     # Reorder the DataFrame columns
     column_order = [
         'Player', 'Eno Name', 'ESPN Name', 'Tier', 'Opponent', 'Blurb',
@@ -274,8 +276,15 @@ def export_to_google_sheet(df, sheet_id, sheet_name):
         print(f"Error exporting to Google Sheet: {str(e)}")
         raise
 
+def extract_sheet_id(full_url):
+    match = re.search(r'/d/([a-zA-Z0-9-_]+)', full_url)
+    if match:
+        return match.group(1)
+    else:
+        return None
 
-TARGET_SHEET_ID = os.getenv("SECRET_SPREADSHEET_ID")
+TARGET_SHEET_URL = os.getenv("SECRET_SPREADSHEET_ID")
+TARGET_SHEET_ID = extract_sheet_id(TARGET_SHEET_URL)
 export_to_google_sheet(df, TARGET_SHEET_ID, 'Sheet2')
 
 print("Success")
