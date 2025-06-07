@@ -6,3 +6,6 @@ google-auth
 rapidfuzz
 espn_api
 oauth2client
+os
+json
+re
