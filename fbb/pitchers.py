@@ -276,15 +276,15 @@ def export_to_google_sheet(df, sheet_id, sheet_name):
         print(f"Error exporting to Google Sheet: {str(e)}")
         raise
 
-def extract_sheet_id(full_url):
-    match = re.search(r'/d/([a-zA-Z0-9-_]+)', full_url)
-    if match:
-        return match.group(1)
-    else:
-        return None
+# def extract_sheet_id(full_url):
+#     match = re.search(r'/d/([a-zA-Z0-9-_]+)', full_url)
+#     if match:
+#         return match.group(1)
+#     else:
+#         return None
 
-TARGET_SHEET_URL = os.getenv("SECRET_GOOGLE_SPREADSHEET_ID")
-TARGET_SHEET_ID = extract_sheet_id(TARGET_SHEET_URL)
+TARGET_SHEET_ID = os.getenv("SECRET_GOOGLE_SPREADSHEET_ID")
+# TARGET_SHEET_ID = extract_sheet_id(TARGET_SHEET_URL)
 export_to_google_sheet(df, TARGET_SHEET_ID, 'Sheet2')
 
 print("Success")
