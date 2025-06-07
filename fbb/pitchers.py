@@ -149,7 +149,7 @@ def espn_fuzzy_match():
 
 df = espn_fuzzy_match()
 
-creds_json = os.environ.get("GOOGLE_SHEETS_CREDS")
+creds_json = os.environ.get("SECRET_GOOGLE_SERVICE_ACCOUNT_KEY")
 
 def get_google_client():
     """Set up and return authenticated Google Sheets client."""
@@ -158,23 +158,18 @@ def get_google_client():
         'https://www.googleapis.com/auth/drive',
         'https://www.googleapis.com/auth/spreadsheets'
     ]
-
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(
+    
+    # Try to get credentials from environment variable first
+    if creds_json:
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
             json.loads(creds_json), 
             scope
         )
-    
-    # Try to get credentials from environment variable first
-    # if creds_json:
-    #     creds = ServiceAccountCredentials.from_json_keyfile_dict(
-    #         json.loads(creds_json), 
-    #         scope
-    #     )
-    # # If not found, use the local JSON file
-    # else:
-    #     if not os.path.exists(creds_file):
-    #         raise FileNotFoundError("Google Sheets credentials not found")
-    #     creds = ServiceAccountCredentials.from_json_keyfile_name(creds_file, scope)
+    # If not found, use the local JSON file
+    else:
+        if not os.path.exists(creds_file):
+            raise FileNotFoundError("Google Sheets credentials not found")
+        creds = ServiceAccountCredentials.from_json_keyfile_name(creds_file, scope)
     
     return gspread.authorize(creds)
 
