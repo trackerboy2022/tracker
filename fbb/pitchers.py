@@ -149,6 +149,57 @@ def espn_fuzzy_match():
 
 df = espn_fuzzy_match()
 
+def get_team_runs_rankings():
+    """
+    Scrape MLB team runs per game rankings from teamrankings.com.
+    Returns a dictionary with team abbreviations as keys and runs rank as values.
+    """
+    url = "https://www.teamrankings.com/mlb/stat/runs-per-game"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    }
+    
+    # Create a dictionary of team name variations to abbreviations
+    team_abbrev = {
+        'Arizona': 'ARI', 'Atlanta': 'ATL', 'Baltimore': 'BAL', 'Boston': 'BOS',
+        'Chicago Cubs': 'CHC', 'Chi Cubs': 'CHC', 'Chicago White Sox': 'CWS', 
+        'Chi Sox': 'CHW', 'Cincinnati': 'CIN', 'Cleveland': 'CLE',
+        'Colorado': 'COL', 'Detroit': 'DET', 'Houston': 'HOU',
+        'Kansas City': 'KCR', 'LA Angels': 'LAA', 'LA Dodgers': 'LAD',
+        'Miami': 'MIA', 'Milwaukee': 'MIL', 'Minnesota': 'MIN', 'NY Mets': 'NYM',
+        'NY Yankees': 'NYY', 'Sacramento': 'ATH', 'Philadelphia': 'PHI',
+        'Pittsburgh': 'PIT', 'San Diego': 'SDP', 'SF Giants': 'SFG',
+        'Seattle': 'SEA', 'St. Louis': 'STL', 'Tampa Bay': 'TBR', 'Texas': 'TEX',
+        'Toronto': 'TOR', 'Washington': 'WSN'
+    }
+    
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    # Initialize dictionary for rankings
+    runs_rankings = {}
+    
+    # Find all table rows except header
+    rows = soup.select('table.datatable tbody tr')
+    
+    # Process each row
+    for rank, row in enumerate(rows, 1):
+        # Get team name from the first cell
+        cells = row.find_all('td')
+        if cells:
+            team_name = cells[1].text.strip()
+            
+            # Match team name to abbreviation
+            for name, abbrev in team_abbrev.items():
+                if name.lower() in team_name.lower():
+                    runs_rankings[abbrev] = rank
+                    break
+    
+    return runs_rankings
+
+runs_rankings = get_team_runs_rankings()
+
 creds_json = os.environ.get("SECRET_GOOGLE_SERVICE_ACCOUNT_KEY")
 
 def get_google_client():
@@ -222,11 +273,12 @@ def process_google_sheet_data(df, google_sheet_data):
             df.loc[index, 'Pitching+'] = pd.to_numeric(matched_row['Pitching+'], errors='coerce')
             df.loc[index, 'Notes'] = matched_row['Notes']
 
+    # Add Opponent Runs Rank column
+    df['Opp Runs'] = df['Opponent'].map(runs_rankings)
 
-    
     # Reorder the DataFrame columns
     column_order = [
-        'Player', 'Eno Name', 'ESPN Name', 'Tier', 'Opponent', 'Blurb',
+        'Player', 'Eno Name', 'ESPN Name', 'Tier', 'Opponent', 'Opp Runs', 'Blurb',
         'Eno', 'Stuff+', 'Location+', 'Pitching+', 'Notes'
     ]
     df = df[column_order]
