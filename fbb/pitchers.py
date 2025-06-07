@@ -158,18 +158,23 @@ def get_google_client():
         'https://www.googleapis.com/auth/drive',
         'https://www.googleapis.com/auth/spreadsheets'
     ]
-    
-    # Try to get credentials from environment variable first
-    if creds_json:
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(
             json.loads(creds_json), 
             scope
         )
-    # If not found, use the local JSON file
-    else:
-        if not os.path.exists(creds_file):
-            raise FileNotFoundError("Google Sheets credentials not found")
-        creds = ServiceAccountCredentials.from_json_keyfile_name(creds_file, scope)
+    
+    # Try to get credentials from environment variable first
+    # if creds_json:
+    #     creds = ServiceAccountCredentials.from_json_keyfile_dict(
+    #         json.loads(creds_json), 
+    #         scope
+    #     )
+    # # If not found, use the local JSON file
+    # else:
+    #     if not os.path.exists(creds_file):
+    #         raise FileNotFoundError("Google Sheets credentials not found")
+    #     creds = ServiceAccountCredentials.from_json_keyfile_name(creds_file, scope)
     
     return gspread.authorize(creds)
 
