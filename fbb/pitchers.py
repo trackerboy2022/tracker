@@ -283,7 +283,7 @@ def extract_sheet_id(full_url):
     else:
         return None
 
-TARGET_SHEET_URL = os.getenv("SECRET_SPREADSHEET_ID")
+TARGET_SHEET_URL = os.getenv("SECRET_GOOGLE_SPREADSHEET_ID")
 TARGET_SHEET_ID = extract_sheet_id(TARGET_SHEET_URL)
 export_to_google_sheet(df, TARGET_SHEET_ID, 'Sheet2')
 
