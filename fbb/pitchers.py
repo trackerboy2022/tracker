@@ -231,7 +231,7 @@ def import_google_sheet(sheet_id, sheet_name):
     return sheet.get_all_records()
 
 SOURCE_SHEET_ID = "15yyCk5HEIUbWMMyVC3-P-UorLXUT52eiIp3lD2ST1TA"
-google_sheet_data = import_google_sheet(SOURCE_SHEET_ID, "Ranks 4/25")
+google_sheet_data = import_google_sheet(SOURCE_SHEET_ID, "ranks June 3")
 
 def process_google_sheet_data(df, google_sheet_data):
     """
