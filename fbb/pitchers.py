@@ -228,7 +228,36 @@ def import_google_sheet(sheet_id, sheet_name):
     """Import data from Google Sheet using sheet ID."""
     client = get_google_client()
     sheet = client.open_by_key(sheet_id).worksheet(sheet_name)
-    return sheet.get_all_records()
+    
+    # Get all values including headers
+    all_values = sheet.get_all_values()
+    if not all_values:
+        return []
+    
+    # Get headers from first row
+    headers = all_values[0]
+    
+    # Make headers unique by adding a counter to duplicates
+    unique_headers = []
+    header_count = {}
+    
+    for header in headers:
+        if header in header_count:
+            header_count[header] += 1
+            unique_headers.append(f"{header}_{header_count[header]}")
+        else:
+            header_count[header] = 0
+            unique_headers.append(header)
+    
+    # Create list of dictionaries with unique headers
+    records = []
+    for row in all_values[1:]:  # Skip header row
+        record = {}
+        for header, value in zip(unique_headers, row):
+            record[header] = value
+        records.append(record)
+    
+    return records
 
 SOURCE_SHEET_ID = "15yyCk5HEIUbWMMyVC3-P-UorLXUT52eiIp3lD2ST1TA"
 google_sheet_data = import_google_sheet(SOURCE_SHEET_ID, "ranks June 3")
