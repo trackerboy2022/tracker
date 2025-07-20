@@ -2,7 +2,8 @@ name: Fantasy Baseball
 
 on:
   schedule:
-    - cron: '0 9 * * *' # 10am Daily
+    - cron: '0 14 * * *' # 10am Daily
+    - cron: '0 23 * * *' # 10am Daily
   workflow_dispatch: # Add this trigger
 
 jobs:
