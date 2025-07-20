@@ -2,7 +2,6 @@ name: Weekly Web Scraper
 
 on:
   schedule:
-    - cron: '0 21 * * MON' # 4pm ET every Monday
     - cron: '0 14 * * TUE' # 9am ET every Tuesday
   workflow_dispatch: # Add this trigger
 
