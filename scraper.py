@@ -52,20 +52,48 @@ def extract_table_data(url):
         for row in rows:
             row_data = {}
 
-            # Extract title
-            title_element = row.select_one('H3#title-of-a-story.c-title')
-            row_data['title'] = title_element.text.strip() if title_element else ''
+            # Find all the data cell containers within the row
+            data_cells = row.select('DIV.o-chart-results-list__item')
 
-            # Extract artist
-            artist_element = row.select_one('SPAN.c-label')
-            row_data['artist'] = artist_element.text.strip() if artist_element else ''
+            # Ensure you have enough data cells
+            if len(data_cells) >= 5: # We now expect at least 5 data cells
+                # The first cell contains the title and artist
+                # You can still extract them like this, or from data_cells[0]
+                title_element = row.select_one('H3#title-of-a-story.c-title')
+                row_data['title'] = title_element.text.strip() if title_element else ''
 
-            # Extract additional data cells
-            additional_data_container = row.select_one('DIV.lrv-u-flex.lrv-u-height-100p.u-background-color-grey-lightest\\@mobile-max.u-height-37\\@mobile-max')
-            if additional_data_container:
-                data_cells = additional_data_container.select('DIV.o-chart-results-list__item')
-                for i, cell in enumerate(data_cells):
-                    row_data[f'data_cell_{i+1}'] = cell.text.strip() if cell else ''
+                artist_element = row.select_one('SPAN.c-label')
+                row_data['artist'] = artist_element.text.strip() if artist_element else ''
+
+                # Extract Debut Date from the second data cell (index 1)
+                debut_date_cell = data_cells[1]
+                debut_date_element = debut_date_cell.select_one('SPAN.artist-chart-row-debut-date')
+                row_data['debut_date'] = debut_date_element.text.strip() if debut_date_element else ''
+
+                # Extract Peak Position from the third data cell (index 2)
+                peak_pos_cell = data_cells[2]
+                peak_pos_element = peak_pos_cell.select_one('SPAN.artist-chart-row-peak-pos')
+                peak_week_element = peak_pos_cell.select_one('SPAN.artist-chart-row-peak-week')
+                peak_position = peak_pos_element.text.strip() if peak_pos_element else ''
+                peak_week = peak_week_element.text.strip() if peak_week_element else ''
+                row_data['peak_position'] = f"{peak_position}\n\n{peak_week}" if peak_position or peak_week else ''
+
+                # Extract Peak Date from the fourth data cell (index 3)
+                peak_date_cell = data_cells[3]
+                peak_date_element = peak_date_cell.select_one('SPAN.artist-chart-row-peak-date')
+                row_data['peak_date'] = peak_date_element.text.strip() if peak_date_element else ''
+
+                # Extract Weeks on Chart from the fifth data cell (index 4)
+                weeks_on_chart_cell = data_cells[4]
+                weeks_on_chart_element = weeks_on_chart_cell.select_one('SPAN.artist-chart-row-week-on-chart')
+                row_data['weeks_on_chart'] = weeks_on_chart_element.text.strip() if weeks_on_chart_element else ''
+
+                # Note: The third cell also contains 'peak-week'. If you need that, you can extract it similarly:
+                # peak_week_element = peak_pos_cell.select_one('SPAN.artist-chart-row-peak-week')
+                # row_data['peak_week'] = peak_week_element.text.strip() if peak_week_element else ''
+
+            else:
+                print(f"Warning: Not enough data cells found in row: {row_data.get('title', 'Unknown Title')}")
 
             table_data.append(row_data)
 
@@ -118,12 +146,17 @@ def output_to_google_sheets(data, spreadsheet_id, sheet_name):
         return
 
     # Prepare the data for output
-    header = ['title', 'artist', 'data_cell_1', 'data_cell_2', 'data_cell_3', 'data_cell_4']
+    header = ['title', 'artist', 'debut_date', 'peak_position', 'peak_date', 'weeks_on_chart']
     output_data = [header]
     for row in data:
-        output_row = [row.get('title', ''), row.get('artist', '')]
-        for i in range(1, 5):
-            output_row.append(row.get(f'data_cell_{i}', ''))
+        output_row = [
+            row.get('title', ''),
+            row.get('artist', ''),
+            row.get('debut_date', ''),
+            row.get('peak_position', ''),
+            row.get('peak_date', ''),
+            row.get('weeks_on_chart', '')
+        ]
         output_data.append(output_row)
 
     # Update the sheet with the data
