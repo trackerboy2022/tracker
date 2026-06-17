@@ -102,7 +102,7 @@ df, rankings = extract_pitcher_rankings()
 
 # Step 6: Connect to your ESPN Fantasy Baseball League
 league_id = os.getenv("SECRET_LEAGUE_ID")
-season_id = 2025
+season_id = 2026
 espn_s2 = os.getenv("SECRET_ESPN_S2_COOKIE")
 swid = os.getenv("SECRET_SWID")
 
@@ -259,8 +259,8 @@ def import_google_sheet(sheet_id, sheet_name):
     
     return records
 
-SOURCE_SHEET_ID = "15yyCk5HEIUbWMMyVC3-P-UorLXUT52eiIp3lD2ST1TA"
-google_sheet_data = import_google_sheet(SOURCE_SHEET_ID, "ranks June 3")
+SOURCE_SHEET_ID = "1daR9RNic3GcfDb6FLsm2OZRBS8VkqucOqHSnIS7ru5c"
+google_sheet_data = import_google_sheet(SOURCE_SHEET_ID, "ranks5/15")
 
 def process_google_sheet_data(df, google_sheet_data):
     """
@@ -276,10 +276,10 @@ def process_google_sheet_data(df, google_sheet_data):
     google_sheet_df = pd.DataFrame(google_sheet_data)  # Convert Google Sheets data to a DataFrame
 
     # Ensure the Google Sheets DataFrame has only the required columns
-    google_sheet_df = google_sheet_df[['Eno', 'Name', 'Stuff+', 'Location+', 'Pitching+', 'Blurb']]
+    google_sheet_df = google_sheet_df[['Eno', 'Name', 'Stuff+', 'Location+', 'Pitching+', 'Health']]
 
     # Rename the 'Blurb' column to 'Notes'
-    google_sheet_df.rename(columns={'Blurb': 'Notes'}, inplace=True)
+    google_sheet_df.rename(columns={'Health': 'Notes'}, inplace=True)
     google_sheet_df.rename(columns={'Name': 'Eno Name'}, inplace=True)
 
     # Perform fuzzy matching between rankings and Google Sheets data
@@ -307,7 +307,7 @@ def process_google_sheet_data(df, google_sheet_data):
 
     # Reorder the DataFrame columns
     column_order = [
-        'Player', 'Eno Name', 'ESPN Name', 'Tier', 'Opponent', 'Opp Runs', 'Blurb',
+        'Player', 'Eno Name', 'ESPN Name', 'Tier', 'Opponent', 'Opp Runs', 'Health',
         'Eno', 'Stuff+', 'Location+', 'Pitching+', 'Notes'
     ]
     df = df[column_order]
