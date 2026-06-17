@@ -25,7 +25,8 @@ def extract_pitcher_rankings():
     target_post = None
     for post in posts:
         title = post['title']['rendered']
-        if "Starting Pitcher Streamer Rankings" in title:
+        # Use a case-insensitive, flexible match for streamer ranks titles
+        if "starting pitcher streamer" in title.lower():
             target_post = post
             break
 
